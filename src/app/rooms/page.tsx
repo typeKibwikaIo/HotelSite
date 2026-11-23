@@ -15,7 +15,7 @@ export default async function RoomsPage({ searchParams }: { searchParams: Promis
   const sort = typeof sp.sort === "string" ? sp.sort : "recommended";
   const validDates = checkIn && checkOut && checkOut > checkIn;
 
-  let rooms = await prisma.roomCategory.findMany({
+  const rooms = await prisma.roomCategory.findMany({
     where: { published: true },
     include: { images: true },
     orderBy: { pricePerNight: "asc" },
@@ -44,29 +44,29 @@ export default async function RoomsPage({ searchParams }: { searchParams: Promis
         </p>
 
         {/* Filter bar */}
-        <form className="mt-8 bg-white rounded-2xl border border-mist/70 p-5 grid grid-cols-2 md:grid-cols-6 gap-4 items-end" action="/rooms" method="get">
-          <label className="text-xs font-semibold text-ink-soft uppercase">
+        <form className="mt-8 bg-white rounded-2xl border border-mist/70 p-5 grid grid-cols-1 md:grid-cols-6 gap-4 items-end" action="/rooms" method="get">
+          <label className="block text-xs font-semibold text-ink-soft uppercase min-w-0">
             Check-in
-            <input type="date" name="checkIn" defaultValue={typeof sp.checkIn === "string" ? sp.checkIn : ""} className="mt-1 w-full text-sm border border-mist rounded-lg px-3 py-2" />
+            <input type="date" name="checkIn" defaultValue={typeof sp.checkIn === "string" ? sp.checkIn : ""} className="mt-1 block w-full text-sm border border-mist rounded-lg px-3 py-2" />
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase">
+          <label className="block text-xs font-semibold text-ink-soft uppercase min-w-0">
             Check-out
-            <input type="date" name="checkOut" defaultValue={typeof sp.checkOut === "string" ? sp.checkOut : ""} className="mt-1 w-full text-sm border border-mist rounded-lg px-3 py-2" />
+            <input type="date" name="checkOut" defaultValue={typeof sp.checkOut === "string" ? sp.checkOut : ""} className="mt-1 block w-full text-sm border border-mist rounded-lg px-3 py-2" />
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase">
+          <label className="block text-xs font-semibold text-ink-soft uppercase min-w-0">
             Max price / night
-            <input type="number" name="maxPrice" placeholder="Any" defaultValue={typeof sp.maxPrice === "string" ? sp.maxPrice : ""} className="mt-1 w-full text-sm border border-mist rounded-lg px-3 py-2" />
+            <input type="number" name="maxPrice" placeholder="Any" defaultValue={typeof sp.maxPrice === "string" ? sp.maxPrice : ""} className="mt-1 block w-full text-sm border border-mist rounded-lg px-3 py-2" />
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase">
+          <label className="block text-xs font-semibold text-ink-soft uppercase min-w-0">
             Sort by
-            <select name="sort" defaultValue={sort} className="mt-1 w-full text-sm border border-mist rounded-lg px-3 py-2 bg-white">
+            <select name="sort" defaultValue={sort} className="mt-1 block w-full text-sm border border-mist rounded-lg px-3 py-2 bg-white">
               <option value="recommended">Recommended</option>
               <option value="price-asc">Lowest price</option>
               <option value="price-desc">Highest price</option>
               <option value="size">Most spacious</option>
             </select>
           </label>
-          <button className="bg-peach hover:bg-peach-dark text-white text-sm font-semibold py-2.5 rounded-lg transition-colors col-span-2 md:col-span-2">
+          <button className="bg-peach hover:bg-peach-dark text-white text-sm font-semibold py-2.5 rounded-lg transition-colors w-full md:w-auto md:col-span-2">
             Apply Filters
           </button>
         </form>

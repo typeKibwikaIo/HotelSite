@@ -40,35 +40,35 @@ export function Hero({ title, subtitle, imageUrl }: { title: string; subtitle: s
 
         <form
           onSubmit={search}
-          className="mt-10 bg-white rounded-2xl shadow-2xl p-4 grid grid-cols-2 md:grid-cols-6 gap-3 items-end"
+          className="mt-10 bg-white rounded-2xl shadow-2xl p-4 grid grid-cols-1 md:grid-cols-6 gap-3 items-end"
         >
-          <label className="text-xs font-semibold text-ink-soft uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-ink-soft uppercase tracking-wide min-w-0">
             Check-in
-            <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className={`mt-1 ${inputCls}`} required />
+            <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className={`mt-1 block ${inputCls}`} required />
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-ink-soft uppercase tracking-wide min-w-0">
             Check-out
-            <input type="date" value={checkOut} min={checkIn} onChange={(e) => setCheckOut(e.target.value)} className={`mt-1 ${inputCls}`} required />
+            <input type="date" value={checkOut} min={checkIn} onChange={(e) => setCheckOut(e.target.value)} className={`mt-1 block ${inputCls}`} required />
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-ink-soft uppercase tracking-wide min-w-0">
             Adults
-            <select value={adults} onChange={(e) => setAdults(+e.target.value)} className={`mt-1 ${inputCls}`}>
+            <select value={adults} onChange={(e) => setAdults(+e.target.value)} className={`mt-1 block ${inputCls}`}>
               {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-ink-soft uppercase tracking-wide min-w-0">
             Children
-            <select value={children} onChange={(e) => setChildren(+e.target.value)} className={`mt-1 ${inputCls}`}>
+            <select value={children} onChange={(e) => setChildren(+e.target.value)} className={`mt-1 block ${inputCls}`}>
               {[0, 1, 2, 3, 4].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
-          <label className="text-xs font-semibold text-ink-soft uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-ink-soft uppercase tracking-wide min-w-0">
             Rooms
-            <select value={rooms} onChange={(e) => setRooms(+e.target.value)} className={`mt-1 ${inputCls}`}>
+            <select value={rooms} onChange={(e) => setRooms(+e.target.value)} className={`mt-1 block ${inputCls}`}>
               {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
-          <button type="submit" className="bg-peach hover:bg-peach-dark text-white font-semibold text-sm py-3 rounded-lg transition-colors col-span-2 md:col-span-1">
+          <button type="submit" className="bg-peach hover:bg-peach-dark text-white font-semibold text-sm py-3 rounded-lg transition-colors w-full md:w-auto md:col-span-1">
             Search Rooms
           </button>
         </form>
