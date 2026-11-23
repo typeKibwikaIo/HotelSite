@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #2b2f36;
+  --color-ink-soft: #4a4f57;
+  --color-cream: #faf7f2;
+  --color-sand: #f1ece3;
+  --color-mist: #e8e4dc;
+  --color-peach: #e8a87c;
+  --color-peach-dark: #d68d5f;
+  --color-bluegrey: #8fa3b8;
+  --color-bluegrey-dark: #6b7f96;
+  --color-bluegrey-deep: #46586c;
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-cream);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.hero-overlay {
+  background: linear-gradient(to bottom, rgba(30, 38, 50, 0.45), rgba(30, 38, 50, 0.15) 40%, rgba(30, 38, 50, 0.55));
+}
+
+.card-hover {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px rgba(43, 47, 54, 0.35);
+}
+
+.img-zoom img {
+  transition: transform 0.8s ease;
+}
+.img-zoom:hover img {
+  transform: scale(1.06);
 }

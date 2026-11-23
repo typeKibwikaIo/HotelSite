@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  CHECKED_IN
+  CHECKED_OUT
+  COMPLETED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  UNPAID
+  DEPOSIT_PAID
+  PARTIALLY_PAID
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  PAY_AT_HOTEL
+}
+
+enum PhysicalRoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  BLOCKED
+}
+
+enum GalleryCategory {
+  EXTERIOR
+  ROOMS
+  SUITES
+  RESTAURANT
+  POOL
+  FACILITIES
+  EVENTS
+  SURROUNDINGS
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN") // SUPER_ADMIN | ADMIN | RECEPTIONIST
+  createdAt    DateTime @default(now())
+}
+
+model WebsiteSetting {
+  id                String  @id @default("settings")
+  hotelName         String  @default("The Grand Azure")
+  tagline           String  @default("A peaceful retreat by the coast")
+  heroTitle         String  @default("Discover Your Perfect Stay")
+  heroSubtitle      String  @default("Experience timeless elegance, breathtaking views and impeccable hospitality at our award-winning hotel and resort.")
+  aboutTitle        String  @default("A Hotel Crafted for Unforgettable Moments")
+  aboutText         String  @default("Nestled along the pristine coastline, The Grand Azure offers a sanctuary of comfort and sophistication. From sunrise over the ocean to candlelit evenings, every detail is designed to make your stay extraordinary.")
+  address           String  @default("12 Oceanview Boulevard, Coastal Bay")
+  phone             String  @default("+1 (555) 010-2030")
+  email             String  @default("stay@grandaazure.com")
+  mapsUrl           String  @default("https://maps.google.com")
+  notificationEmail String  @default("admin@grandaazure.com")
+  autoConfirm       Boolean @default(true)
+  socialFacebook    String  @default("")
+  socialInstagram   String  @default("")
+  socialTwitter     String  @default("")
+}
+
+model RoomCategory {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  name           String
+  shortDesc      String        @default("")
+  description    String        @default("")
+  pricePerNight  Float
+  weekendRate    Float?
+  maxAdults      Int           @default(2)
+  maxChildren    Int           @default(0)
+  maxOccupancy   Int           @default(2)
+  bedType        String        @default("1 Queen Bed")
+  roomSizeSqm    Float?
+  bathrooms      Int           @default(1)
+  amenities      String        @default("[]") // JSON array of amenity keys
+  published      Boolean       @default(true)
+  featured       Boolean       @default(false)
+  images         RoomImage[]
+  physicalRooms  PhysicalRoom[]
+  reservationRooms ReservationRoom[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model RoomImage {
+  id         String        @id @default(cuid())
+  category   RoomCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  url        String
+  caption    String        @default("")
+  isMain     Boolean       @default(false)
+  order      Int           @default(0)
+}
+
+model PhysicalRoom {
+  id          String             @id @default(cuid())
+  number      String             @unique
+  category    RoomCategory       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  status      PhysicalRoomStatus @default(AVAILABLE)
+  notes       String             @default("")
+  reservations ReservationRoom[]
+  createdAt   DateTime           @default(now())
+}
+
+model Facility {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  icon        String   @default("star")
+  imageUrl    String   @default("")
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+}
+
+model GalleryImage {
+  id        String          @id @default(cuid())
+  url       String
+  caption   String          @default("")
+  category  GalleryCategory @default(FACILITIES)
+  featured  Boolean         @default(false)
+  order     Int             @default(0)
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  guestName String
+  rating    Int      @default(5)
+  review    String
+  guestPhoto String  @default("")
+  date      DateTime @default(now())
+  published Boolean  @default(true)
+}
+
+model Reservation {
+  id             String            @id @default(cuid())
+  reference      String            @unique
+  status         ReservationStatus @default(PENDING)
+  paymentStatus  PaymentStatus     @default(UNPAID)
+  paymentMethod  PaymentMethod     @default(PAY_AT_HOTEL)
+  checkIn        DateTime
+  checkOut       DateTime
+  adults         Int               @default(1)
+  children       Int               @default(0)
+  roomsCount     Int               @default(1)
+  totalAmount    Float             @default(0)
+  specialRequests String           @default("")
+  internalNotes  String            @default("")
+  guestFirstName String
+  guestLastName  String
+  guestEmail     String
+  guestPhone     String            @default("")
+  guestCountry   String            @default("")
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  rooms          ReservationRoom[]
+}
+
+model ReservationRoom {
+  id             String         @id @default(cuid())
+  reservation    Reservation    @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  reservationId  String
+  category       RoomCategory   @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  physicalRoom   PhysicalRoom?  @relation(fields: [physicalRoomId], references: [id])
+  physicalRoomId String?
+  checkIn        DateTime
+  checkOut       DateTime
+  pricePerNight  Float
+  quantity       Int            @default(1)
+  nights         Int
+  lineTotal      Float
+}
